@@ -72,7 +72,7 @@ export default function ExpenseForm() {
       <legend
         className="upercase text-center text-2xl font-black border-b-4 border-blue-500"
       >
-        Nuevo Gasto
+        {state.editingId ? 'Actualizar Gasto' : 'Nuevo Gasto'}
       </legend>
 
       {error && <ErrorMesaage>{error}</ErrorMesaage>}
@@ -156,7 +156,7 @@ export default function ExpenseForm() {
       <input
         type="submit"
         className="bg-blue-600 cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg"
-        value={'Registrar Gato'}
+        value={state.editingId ? 'Guardar Cambios' : 'Registrar Gasto'}
       />
 
     </form>
