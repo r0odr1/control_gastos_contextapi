@@ -1,32 +1,32 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import type { DraftExpense, Value } from "../types";
-import { categories } from "../data/categories";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import 'react-calendar/dist/Calendar.css';
 import DatePicker from 'react-date-picker';
-import 'react-calendar/dist/Calendar.css'
-import 'react-date-picker/dist/DatePicker.css'
-import ErrorMesaage from "./ErrorMesaage";
+import 'react-date-picker/dist/DatePicker.css';
+import { categories } from "../data/categories";
 import { useBudget } from "../hooks/useBudget";
+import type { DraftExpense, Value } from "../types";
+import ErrorMesaage from "./ErrorMesaage";
 
 export default function ExpenseForm() {
-  
-  const [expense, setExpense] = useState<DraftExpense>({
-    amount: 0,
-    expenseName: '',
-    category: '',
-    date: new Date()
-  })
-
-  const [error, setError] = useState('')
-  const [previousAmout, setpreviousAmout] = useState(0)
   const { dispatch, state, remaininBudget } = useBudget()
 
-  useEffect(() => {
-    if(state.editingId) {
-      const editingExpense = state.expenses.filter( currentExpense => currentExpense.id === state.editingId)[0]
-      setExpense(editingExpense)
-      setpreviousAmout(editingExpense.amount)
-    }
-  }, [state.editingId, state.expenses])
+  const editingExpense = state.editingId ? state.expenses.find(exp => exp.id === state.editingId) : null;
+  
+  const [expense, setExpense] = useState<DraftExpense>(() => {
+    return editingExpense
+      ? { ...editingExpense } // Clonar para evitar mutaciones
+      : {
+          amount: 0,
+          expenseName: '',
+          category: '',
+          date: new Date()
+        };
+  });
+
+  const [error, setError] = useState('')
+  const [previousAmout, setpreviousAmout] = useState(() => {
+    return editingExpense?.amount || 0;
+  });
 
   const handleChangeDate = (value : Value) => {
     setExpense({
