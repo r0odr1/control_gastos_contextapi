@@ -45,6 +45,14 @@ export default function ExpenseForm() {
 
     //Agregar gasto
     dispatch({type: 'add-expense', payload: { expense }})
+
+    //reiniciar el state
+    setExpense({
+      amount: 0,
+      expenseName: '',
+      category: '',
+      date: new Date()
+    })
   }
 
 
@@ -89,6 +97,7 @@ export default function ExpenseForm() {
           placeholder="Añade la cantidad del gasto: Ej. 300"
           className="bg-slate-100 p-2 rounded-lg"
           name="amount"
+          onChange={handleChange}
           value={expense.amount}
         />
       </div>
