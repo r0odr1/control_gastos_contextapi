@@ -10,6 +10,7 @@ import { formatDate } from "../helpers"
 import type { Expense } from "../types"
 import AmountDisplay from "./AmountDisplay"
 import { categories } from "../data/categories"
+import { useBudget } from "../hooks/useBudget"
 import "react-swipeable-list/dist/styles.css"
 
 type ExpenseDetailProps = {
@@ -17,6 +18,7 @@ type ExpenseDetailProps = {
 }
 
 export default function ExpenseDetail({expense} : ExpenseDetailProps) {
+  const { dispatch } = useBudget()
   const categoryInfo = useMemo (() => categories.filter(cat => cat.id === expense.category)[0], [expense])
 
   const leadingActions = () => (
@@ -32,7 +34,7 @@ export default function ExpenseDetail({expense} : ExpenseDetailProps) {
   const trailingActions = () => (
     <TrailingActions>
       <SwipeAction
-        onClick={() => {}}
+        onClick={() => dispatch({ type: "remove-expense", payload: {id: expense.id} })}
         destructive={true}
       >
         Eliminar
@@ -43,11 +45,11 @@ export default function ExpenseDetail({expense} : ExpenseDetailProps) {
   return (
     <SwipeableList>
       <SwipeableListItem
-        maxSwipe={30}
+        maxSwipe={1}
         leadingActions={leadingActions()}
         trailingActions={trailingActions()}
       >
-        <div className="bg-white shadow-lg p-10 border-gray-200 rounded-lg flex gap-5 items-center">
+        <div className="bg-white shadow-lg p-10 w-full border-gray-200 rounded-lg flex gap-5 items-center">
           <div>
             <img
               src={`/icono_${categoryInfo.icon}.svg`}
